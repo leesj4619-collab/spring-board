@@ -27,7 +27,7 @@ public interface ProductMapper {
     List<Product> 전체제품목록();
 
     // 제품 단건 조회
-    Product 제품단건(int id);
+    Product 제품단건(Long id);
 
     // 제품 추가
     void 제품추가(Product product);
@@ -36,5 +36,5 @@ public interface ProductMapper {
     void 제품수정(Product product);
 
     // 제품 삭제
-    void 제품삭제(int id);
+    void 제품삭제(long id);
 }

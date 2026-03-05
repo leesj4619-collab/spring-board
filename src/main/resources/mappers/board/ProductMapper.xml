@@ -4,20 +4,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.board.springboard.model.mapper.ProductMapper">
-    <select id="전체제품목록" resultType="com.board.springboard.model.dto.Board">
+    <select id="전체제품목록" resultType="com.board.springboard.model.dto.Product">
         select * from products order by id desc
     </select>
 
-    <select id="단품단건" resultType="com.board.springboard.model.mapper.BoardMapper">
+    <select id="단품단건" resultType="com.board.springboard.model.dto.Product">
         select * from products where id = #{id}
     </select>
 
-    <insert id="제품추가" parameterType="com.board.springboard.model.mapper.BoardMapper">
+    <insert id="제품추가" parameterType="com.board.springboard.model.dto.Product">
         insert into products (name, price, stock)
         values (#{name}, #{price}, #{stock})
     </insert>
 
-    <update id="제품수정" parameterType="com.board.springboard.model.mapper.BoardMapper">
+    <update id="제품수정" parameterType="com.board.springboard.model.dto.Product">
         update products set name = #{name}, price = #{price}, stock = #{stock} where id = #{id}
     </update>
 
