@@ -43,7 +43,7 @@
                 @GetMapping()이나 @__Mapping()에 연결된 "" 내부에 작성되어 있는
                 주소 데이터를 작성하는 것이다.
                 -->
-                <a href="/user/find-email" class="text-muted">이메일 찾기</a>
+                <a href="/user/find-email" class="text-muted">이메일 찾기!</a>
             </div>
 
         </form>
