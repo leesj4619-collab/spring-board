@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.board.springboard.model.mapper.BoardMapper">
+    <!-- 전체 게시물 조회 -->
+    <select id="전체게시물" resultType="com.board.springboard.model.dto.Board">
+        <!-- SQL을 작성하시오 -->
+        SELECT * FROM board order by board_no DESC;
+    </select>
+
+    <!-- 게시물 하나 조회
+    WHERE board_no = #{???}
+    DB의 SQL에서 하나의 게시물을 조회할 경우 WHERE board_no = 1 과 같이 작성
+    JAVA에서 클라이언트가 보고자하는 상세 게시물을 클라이언트 눈에 보여줄 필요가 있다.
+
+    WHERE board_no = #{???}는 소비지가 선택한 번호를 넣는 곳
+    #{???} = JSP에서 소비자가 선택한 번호를 백엔드로 넘겨받음
+             소비지가 선택한 번호를 넘겨받은 백엔드는 SQL에 전달하기 위에 데이터를 담을 공간 필요한
+             데이터가 담길 공간을 "com.board.springboard.model.dto.Board" 내부에 작성한
+             변수 공간을 선택하고, 선택된 공간을 #{???} 공간의 명칭을 작성하는 것
+    -->
+    <select id="단일게시물" resultType="com.board.springboard.model.dto.Board">
+        <!-- SQL을 작성하시오 -->
+        SELECT * FROM board WHERE board_no = #{board_no}
+    </select>
+
+    <!-- 게시물 추가 -->
+    <insert id="게시물추가" parameterType="com.board.springboard.model.dto.Board">
+        <!-- SQL을 작성하시오 -->
+        INSERT INTO board (title, content, writer, created_at, view_count)
+        VALUES (#{title}, #{content}, #{writer}, NOW(), 0)
+    </insert>
+
+    <!-- 게시물 수정 -->
+    <update id="게시물수정" parameterType="com.board.springboard.model.dto.Board">
+        <!-- SQL을 작성하시오 -->
+        UPDATE board SET title = #{titel}, content = #{content}
+        WHERE board_no = #{board_no}
+    </update>
+
+    <!-- 게시물 삭제 -->
+    <delete id="게시물삭제" parameterType="int">
+        <!-- SQL을 작성하시오 -->
+        DELETE FROM board WHERE board_no = #{board_no}
+    </delete>
+
+    <!-- 조회수 수정 -->
+    <update id="조회수수정" parameterType="int">
+        <!-- SQL을 작성하시오 -->
+        UPDATE board SET view_count = view_count + 1
+        WHERE board_no = #{board_no}
+    </update>
+
+</mapper>
