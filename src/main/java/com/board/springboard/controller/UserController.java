@@ -104,6 +104,25 @@ public class UserController {
     // 완성된 기능 {}내부에 기능이 작성되지 않더라도 {} 존재 자체만으로 완성된 기능
         접근제어자 반환타입 기능명칭(매개변수자리){기능자리}
      */
+    // TODO 4: 빈칸을 채우세요
+    @GetMapping("/user/profile")
+    public String profileView(HttpSession session, Model model) {
+        // 무조건 모든 언어에서는
+        // set으로 시작하면 저장하다 의미              (개발자 적 관례)
+        // get으로 시작하면 저장된 데이터를 가져온다 의미 (개발자 적 관례)
+        User loginUser = (User) session.getAttribute("loginUser");
+
+        // 로그인한 유저의 정보가 없는데.. 악의적으로 URL을 접속해서 유저정보를 조회하려 할 경우
+        if (loginUser == null) {
+            return "redirect:/user/login";
+        }
+
+        User freshUser = userService.유저단건조회(loginUser.getId());
+        model.addAttribute("user", freshUser); // 일시적으로 넘겨주는 데이터가 아닌 지속적으로 유지하는 데이터
+        // 새로고침을 하더라도 user 키이름 내부에 존재하는 데이터 보존
+
+        return "redirect:/user/profile";
+    }
 
 
 }

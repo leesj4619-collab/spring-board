@@ -24,12 +24,12 @@ public class ProductController {
      * @param model jsp로 sql에서 가져온 데이터를 전달해주기위한 운반 수단
      * @return 클라이언트가 /product/list 주소로 접속했을 경우 보여질 jsp파일 선택하여 보여주겠다.
      */
-    @GetMapping("/list")
+    @GetMapping("/product_list")
     public String 제품목록(Model model) {
         List<Product> products = productService.전체제품목록();
         //                              ""jsp에서 사용할 변수이름 products sql에서 가져온 데이터
         model.addAttribute("products", products);
-        return "product/list"; // webapp/WEB-INF/views/product/list.jsp
+        return "product/product_list"; // webapp/WEB-INF/views/product/product_product_list.jsp
     }
 
     @GetMapping("/add")
@@ -43,14 +43,14 @@ public class ProductController {
                          RedirectAttributes redirectAttributes) {
         productService.제품추가(product);
         redirectAttributes.addFlashAttribute("msg", "제품이 등록되었습니다.");
-        return "redirect:/product/list";
+        return "redirect:/product/product_list";
     }
 
     @GetMapping("/edit") /* 주소에서 ? 로 시작하는 경로는 Mapping 내에 작서아지 않는다. */
     public String 제품수정폼(@RequestParam Long id, Model model) {
         Product product = productService.제품단건(id); // 수정할 제품 데이터 하나 가져오기
         model.addAttribute("product", product); // 수정할 제품 데이터를 SQL에서 가져온 후 JSP 전달하기
-        return "redirect:/editForm";
+        return "product/editForm";
     }
 
     @PostMapping("/edit") // PostMapping의 경우 제품을 수정한 다음 전달
@@ -59,7 +59,7 @@ public class ProductController {
         // Post / Put / Patch 차이점을 인지하고 사용하자 제품 수정하는데 문제는 없다.
         productService.제품수정(product);
         redirectAttributes.addFlashAttribute("msg", "제품이 수정되었습니다.");
-        return "redirect:/product/list";
+        return "redirect:/product/product_list";
     }
 
     // TODO 11. GET /product/delete?id=1 → 삭제 처리 후 redirect
@@ -69,7 +69,7 @@ public class ProductController {
         productService.제품삭제(id);
         redirectAttributes.addFlashAttribute("msg", "제품이 삭제되었습니다.");
         // 제품 리스트로 돌아가서 제품이 삭제되었다는 메세지를 잠깐 보기위해 redirectAttributes로 가져온다.
-        return "redirect:/product/list";
+        return "redirect:/product/product_list";
    }
 }
 

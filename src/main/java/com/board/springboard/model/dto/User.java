@@ -26,4 +26,5 @@ public class User {
     private String name;
     private String email;
     private LocalDateTime created_at;
+    private String profile_img; // 새로운 경로
 }

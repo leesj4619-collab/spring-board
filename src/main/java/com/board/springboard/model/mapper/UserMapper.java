@@ -40,4 +40,14 @@ public interface UserMapper {
 
     User 이메일로유저찾기(String email);
 
+    /**
+     * 프로필 사진 경로 업데이트
+     * 파일 업로드 후 저장된 경로(String)를 DB의 profile_img 컬럼에 저장
+     * @param user id + profile_img 값이 담긴 User 객체를 SQL로 전달
+     */
+    void 프로필사진수정(User user);
+
+    // TODO 2: 반환타입과 매개변수를 채우세요 (XML의 id값과 메서드명이 일치해야 합니다)
+    User 유저단건조회(int id);
+
 }
