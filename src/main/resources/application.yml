@@ -28,3 +28,4 @@ mybatis:
 file:
   upload:
     path: ${upload.profile.path}
+    board-path: ${upload.board-path}

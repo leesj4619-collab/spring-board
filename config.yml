@@ -5,3 +5,4 @@ db:
 
   upload:
     profile-path: C:/uploads/profile
+    board-path: C:/uploads/board
