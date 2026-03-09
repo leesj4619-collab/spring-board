@@ -11,7 +11,29 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+/*
+    api에서 endpoint는 ~~~ 됩니다.
+    대소문자 / 대문자 -> 집중 주의 할 때 사용
+    자바 파일 맨 첫글자만 주로 사용
+    변수 상수
+    상수 공간은 모두다 대문자 형태로 스네이크 케이스 형태로 사용
 
+    api 주소들의 모음
+    @GetMapping
+     endpoint = "/"                 도메인이 정의 내리는 마지막 지점
+     endpoint = "/board/detail"
+     endpoint = "/board/list"
+     endpoint = "/board/write"
+     endpoint = "/board/edit"
+     endpoint = "/board/delete"
+    @PostMapping
+     endpoint = "/board/writer"
+
+    ⭕         @Controller     ⭕ -> 마지막에 view 화면을 보여주는 것
+
+    ❌ 아직 안함 @RestController ❌ -> DB에서 가져온 데이터를 Json 형태로 화면에서 보여주는 것
+
+ */
 @Controller // jsp나 html 템플릿과 소비자가 연결해야하는 api 주소 작성
 @RequiredArgsConstructor // 이한줄이 생성자 코드를 자동 생성해준다.
 public class ViewController {

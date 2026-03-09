@@ -98,10 +98,10 @@ public class UserService {
      * @return 프로필 사진 경로가 반영된 최신 유저 정보를 다시 웹사이트로 반환
      * @throws java.io.IOException 파일 저장에 실패 할 경우를 대비
      */
-    public /* 나중에 해지 User*/ void 프로필사진업로드(User loginUser, MultipartFile imageFile, String uploadPath) throws IOException {
+    public  User 프로필사진업로드(User loginUser, MultipartFile imageFile, String uploadPath) throws IOException {
 
         // 1. 파일이 비어있으면 업로드 처리 없이 현재 유저 그대로 반환
-        // 나중에 해지 if(imageFile == null || imageFile.isEmpty()) return loginUser; // if() {} 중괄호 냅 코드가 1줄일 경우 {} 생략 가능
+        if(imageFile == null || imageFile.isEmpty()) return loginUser; // if() {} 중괄호 냅 코드가 1줄일 경우 {} 생략 가능
 
         //2. 프로필을 저장하는 경로에 폴더들이 존재하지 않을 경우
         File 폴더 = new File(uploadPath);
@@ -130,12 +130,16 @@ public class UserService {
         db저장할유저정보.setProfile_img(웹경로);
         userMapper.프로필사진수정(db저장할유저정보);
 
-        // 나중에 해지 return userMapper.프로필사진수정(db저장할유저정보);
+        return userMapper.유저단건조회(loginUser.getId());
     }
 
-    // TODO 3: 반환타입, 매개변수, mapper 호출부를 채우세요
     public User 유저단건조회(int id) {
         return userMapper.유저단건조회(id);
+    }
+
+    // TODO 3: 빈칸을 채우세요
+    public void 유저정보수정(User user) {
+        userMapper.유저정보수정(user);
     }
 
 

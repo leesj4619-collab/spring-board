@@ -29,8 +29,8 @@
     <!-- 게시물 추가 -->
     <insert id="게시물추가" parameterType="com.board.springboard.model.dto.Board">
         <!-- SQL을 작성하시오 -->
-        INSERT INTO board (title, content, writer, created_at, view_count)
-        VALUES (#{title}, #{content}, #{writer}, NOW(), 0)
+        INSERT INTO board (title, content, writer, created_at, view_count, attach_img)
+        VALUES (#{title}, #{content}, #{writer}, NOW(), 0, #{attach_img})
     </insert>
 
     <!-- 게시물 수정 -->

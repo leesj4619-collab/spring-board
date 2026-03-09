@@ -47,7 +47,7 @@ public interface UserMapper {
      */
     void 프로필사진수정(User user);
 
-    // TODO 2: 반환타입과 매개변수를 채우세요 (XML의 id값과 메서드명이 일치해야 합니다)
     User 유저단건조회(int id);
 
+    void 유저정보수정(User user);
 }

@@ -63,8 +63,9 @@
 
             <%-- TODO 5. 제품 목록 링크를 추가하시오 --%>
             <%-- 조건 : href = /product/list / 텍스트 = 제품목록 --%>
-            <a href="/product/product_list">제품목록</a>
-
+                <li class="nav-item">
+                    <a class="nav-link" href="/product/product_list">제품목록</a>
+                </li>
 
             <%-- 로그인 전 --%>
             <c:if test="${empty sessionScope.loginUser}">
@@ -79,7 +80,7 @@
             <%-- 로그인 후 --%>
             <c:if test="${not empty sessionScope.loginUser}">
                 <li class="nav-item">
-                    <a class="nav-link">${sessionScope.loginUser.name}님 환영해요!</a>
+                    <a class="nav-link" href="/user/profile">${sessionScope.loginUser.name}님 환영해요!</a>
                     <!-- <span class="nav-link">${sessionScope.loginUser.name}님 환영해요!</span> -->
                 </li>
                 <li class="nav-item">

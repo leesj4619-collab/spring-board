@@ -26,6 +26,7 @@ public class Board {
     private String writer;
     private LocalDateTime created_at; // DB에 저장되는 일자를 현재 작성 시간에 맞춰 개발자가 넣어줌
     private int view_count;
+    private String attach_img;
     /*
     primary key에 해당하는 컬럼은 Integer나 Long인 데이터 공간으로 설정
     이외는 String float int ... 개발자가 만든 자료형 형태로 공간 설정

@@ -4,17 +4,33 @@ import com.board.springboard.model.dto.User;
 import com.board.springboard.model.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
+
+    /**
+     * import org.springframework.beans.factory.annotation.Value;
+     *
+     * file.upload.path = C:/프로필사진을 업로드할 경로
+     *
+     * 프로필 사진 업로드 경로를 키이름으로 가져와서 외부에 노출되지 않도록 한다.
+     */
+    @Value("${file.upload.path}") // application.properties에 작성한 키이름 가져오는 방법
+    private String uploadPath;
+
 
     /**
      * 회원가입 페이지 이동
@@ -104,25 +120,68 @@ public class UserController {
     // 완성된 기능 {}내부에 기능이 작성되지 않더라도 {} 존재 자체만으로 완성된 기능
         접근제어자 반환타입 기능명칭(매개변수자리){기능자리}
      */
-    // TODO 4: 빈칸을 채우세요
-    @GetMapping("/user/profile")
-    public String profileView(HttpSession session, Model model) {
-        // 무조건 모든 언어에서는
-        // set으로 시작하면 저장하다 의미              (개발자 적 관례)
-        // get으로 시작하면 저장된 데이터를 가져온다 의미 (개발자 적 관례)
-        User loginUser = (User) session.getAttribute("loginUser");
 
-        // 로그인한 유저의 정보가 없는데.. 악의적으로 URL을 접속해서 유저정보를 조회하려 할 경우
-        if (loginUser == null) {
-            return "redirect:/user/login";
+
+@GetMapping("/user/profile")
+public String profileView(HttpSession 로그인유저정보, Model model) {
+    // 무조건 모든 언어에서는
+    // set 으로 시작하는 기능의 명칭은 저장하다 의미 가 담겨있다. (개발자 적 관례)
+    // get 으로 시작하는 기능의 명칭은 저장된 데이터를 가져와서 사용하겠다 의미가 담겨있다. (개발자 적 관례)
+    // 로그인유저정보 에서 loginUser 라는 공간에 저장되어 있는 유저에 대한 정보를 가져오기 = getAttribute
+    로그인유저정보.getAttribute("loginUser");
+
+    // 가져온 유저 정보를 User 틀에 맞춰 특정 변수 공간에 임시 보관
+    //  (User) 가져온 유저 정보를 User 객체 형태로 변환하여 임시보관된_유저정보 보관
+    User 임시보관된_유저정보 = (User) 로그인유저정보.getAttribute("loginUser");
+
+    // 로그인한 유저의 정보가 없는데.. 악의적으로 URL을 접속해서 유저정보를 조회하려 할 경우
+    if (임시보관된_유저정보 == null) return "redirect:/user/login"; // 한줄코드는 중괄호 {} 를 생략할 수 있다.
+
+
+    User 프로필수정된_최신유저정보데이터 = userService.유저단건조회(임시보관된_유저정보.getId());
+    model.addAttribute("user", 프로필수정된_최신유저정보데이터); // 일시적으로 넘겨주는 데이터가 아니라 지속적으로 유지하는데이터
+    // 새로고침을 하더라도 user 키이름 내부에 존재하는 데이터 보존
+    return "user/profile";
+}
+
+    @PostMapping("/user/profile/upload")
+    public String 프로필사진업로드하기(@RequestParam("imageFile")MultipartFile imageFile,
+                HttpSession session, RedirectAttributes redirectAttributes) {
+        User 로그인된_유저정보 = (User) session.getAttribute("loginUser");
+
+        if(로그인된_유저정보 == null) return "redirect:/user/login";
+
+        try {
+            // 파일 저장 + DB 업데이트 + 최신 유저 반환
+            User updateUser = userService.프로필사진업로드(로그인된_유저정보, imageFile, uploadPath);
+            session.setAttribute("loginUser", updateUser);
+            redirectAttributes.addFlashAttribute("msg", "프로필 사진이 변경되었습니다.");
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "사진 업로드에 실패했습니다.");
+        }
+        return "redirect:/user/profile";
         }
 
-        User freshUser = userService.유저단건조회(loginUser.getId());
-        model.addAttribute("user", freshUser); // 일시적으로 넘겨주는 데이터가 아닌 지속적으로 유지하는 데이터
-        // 새로고침을 하더라도 user 키이름 내부에 존재하는 데이터 보존
+    @PostMapping("/user/profile/edit")
+    public String 유저정보수정(@ModelAttribute User user,
+                         HttpSession session,
+                         RedirectAttributes redirectAttributes) {
 
-        return "redirect:/user/profile";
+        User 로그인유저 = (User) session.getAttribute("loginUser");
+        if (로그인유저 == null) return "redirect:/user/login";
+
+        // 세션에서 꺼낸 id 를 수정할 user 객체에 세팅
+        user.setId(로그인유저.getId());
+
+        userService.유저정보수정(user);
+
+        // 세션 최신 정보로 갱신
+        User 최신유저 = userService.유저단건조회(로그인유저.getId());
+        session.setAttribute("loginUser", 최신유저);
+
+        redirectAttributes.addFlashAttribute("msg", "정보가 수정되었습니다.");
+        return "redirect:/user/profile/edit";
     }
-
 
 }

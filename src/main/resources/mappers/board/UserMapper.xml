@@ -2,7 +2,29 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    SQL에서는 대소문자 구분을 하지 않는다.
+    하지만, 자바, 자바스크립트에서는 대소문자 구분을 한다.
 
+    SQL에서는 카멜 케이스가 적용되지 않기 때문에 스네이크 케이스(_)를 사용
+    자바에서는 카멜케이스를 주로 사용
+
+    SQL - JAVA 연동
+    SQL에서 스네이크 케이스로 작성한 컬럼명칭
+    JAVA에서 카멜 케이스로 작성한 컬럼명칭
+    과 동일한 명칭 alias 개념
+
+    .. .... 파스칼 케이스 케밥 케이스
+
+    케이스: 카멜 / 스네이크 / 파스칼 / 케밥 케이스
+
+    명명 규칙
+    폴더이름 / 폴더 내 파일이름
+    api 명칭 / endpoint 명칭에 대하여 정의
+
+    api = endpoint의 주소메뉴판
+    endpoint = 개별 주소
+-->
 <mapper namespace="com.board.springboard.model.mapper.UserMapper">
     <select id="전체유저들" resultType="com.board.springboard.model.dto.User">
         SELECT * FROM users
@@ -41,5 +63,13 @@
         FROM users
         WHERE id = #{id}
     </select>
+
+    <!-- TODO 1: id, parameterType, SET 절, WHERE 절을 채우세요 -->
+    <update id="유저정보수정" parameterType="com.board.springboard.model.dto.User">
+        UPDATE users
+        SET name  = #{name},
+            email = #{email}
+        WHERE id = #{id}
+    </update>
 
 </mapper>
