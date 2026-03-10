@@ -1,9 +1,8 @@
 spring:
   application:
     name: spring-board
-
-    config:
-      import: optional:file:./config.yml
+  config:
+    import: optional:file:./config.yml
 
   mvc:
     view:
@@ -14,6 +13,8 @@ spring:
     username: ${db.username}
     password: ${db.password}
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+
 servlet:
   encoding:
     charset: utf-8

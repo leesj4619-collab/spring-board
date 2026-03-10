@@ -110,9 +110,24 @@ public class ViewController {
      * 굳이 이미지 데이터가 있어야 하는 것은 이니다. <br>
      * required=false를 쓰지 않으면 기본적으로 모든 매개변수 속성은 required=true로 되어있다. <br>
      */
-    @PostMapping("/board/write")
+    /*@PostMapping("/board/write")
     public String writeBoard(Board board, @RequestParam(required = false, value = "imageFile") MultipartFile imageFile) throws Exception {
         boardService.writeBoard(board, imageFile);
+        return "redirect:/board/list";
+    }
+    */
+
+    /**
+     * 게시물 작성 처리 (다중 이미지 포함)
+     * @param board     form에서 전송된 게시물 데이터(title, writer, content)
+     * @param imageFiles &lt;input type="file" name="imageFile multiple"&gt;로 전송된 이미지 목록 <br>
+     *                   이미지가 없어도 게시물 작성 가능하도록 required=false 작성
+     * @return           저장 완료 후 게시물 목록으로 리다이렉트
+     * @throws Exception 문제가 발생했을 경우 개발자가 회사의 방침에 따라 예외 상황에 대하여 메뉴얼 따른 대처 코드 제공
+     */
+    @PostMapping("/board/write")
+    public String writeBoard(Board board, @RequestParam(required = false) List<MultipartFile> imageFiles) throws Exception {
+        boardService.writeBoard(board, imageFiles);
         return "redirect:/board/list";
     }
 
