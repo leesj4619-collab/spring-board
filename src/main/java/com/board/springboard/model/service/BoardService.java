@@ -34,7 +34,7 @@ public class BoardService {
     }
 
     // 게시물 추가 됐는지 유무만 확인
-    public void writeBoard(Board board, MultipartFile imageFile, String uploadPath) throws IOException {
+    public void writeBoard(Board board, MultipartFile imageFile) throws IOException {
         // TODO 1 : 만약 이미지 파일이 있을 경우에만 컬럼 데이터 업로도
         if (imageFile != null & !imageFile.isEmpty()) {
             // TODO 2 : 회사컴퓨터 or 개발자컴퓨터에 저장 폴더 없으면 자동 생성

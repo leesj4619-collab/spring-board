@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 /*
@@ -82,11 +83,36 @@ public class ViewController {
 
     /**
      * 게시물 작성 처리 (DB저장)
-     * @return 다이렉트로 list로 이동
+     * 클라이언트가 write.jsp에서 작성한 제목 / 작성자 /내용 / 첨부 이미지를
+     * POST 방식으로 전송하면, 해당 데이터를 받아 DB에 저장한 후
+     * 게시물 목록 페이지로 이동
+     *
+     * @param board 작성된 데이터가 담긴 DTO
+     *              write.jsp의 form에서 전송된 게시물 데이터 (title, writer, content)
+     *              Spring이 자동으로 Board 객체의 필드에 매핑하여 주입해준다.
+     * @param imageFile &lt;input type="file" name="imageFile"&gt;로 전송된 첨부 이미지 파일
+     *                  이미지를 춤부하지 않아도 게시물 작성이 가능하도록 required = false로 설정
+     *                  이미지가 없을 경우 null 또는 비어있는 상태로 전달
+     * @return "redirect:/board/list"
+     *          게시물 저장 완료 후 목록 페이지로 리다이렉트 한다
+     *          redirect:를 붙이면 서버가 클라이언트에게 해당 주소로 다시 요청하도록 명령한다.
+     * @throws Exception 파일 저장 중 IO 오류 등 예외가 발생할 경우를 대비하여 선언한다.
+     *          IO Input Output 파일 읽고, 파일 저장 데이터 받기 보내기 입력 출력 조회 저장 의미
+     * @RequestParam 클라이언트가 URL 또는 form으로 보낸 데이터를 메서드 매개변수에 꽃아주는 어노테이션 <br>
+     * 속성 종류 : <br>
+     * Value는 다른 속성이 없으면 기본으로 설정되는 속성이므로 작성하지 않아도 되는 값 <br>
+     * JSP input의 name과 연결지을 이름 기본값 매개변수명 <br>
+     * required : 필수로 서버나 백엔드에 데이터를 전달해야하는 필수 여부 유무 기본 세팅은 true 되어 있다. <br>
+     * defaultValue : 값이 없을 때 기본으로 설정해놓을 값
+     * @RequestParam(required = false) 이미지가 없어도 게시물 작성 가능하도록 설정
+     * @RequestParam(required = false, value = "imageFile") MultipartFile imageFile)
+     * jsp에서 input name="imageFile"인 이미지 파일을 가져와서 백엔드로 넣을 것이지만 필수는 아니다. <br>
+     * 굳이 이미지 데이터가 있어야 하는 것은 이니다. <br>
+     * required=false를 쓰지 않으면 기본적으로 모든 매개변수 속성은 required=true로 되어있다. <br>
      */
     @PostMapping("/board/write")
-    public String writeBoard(Board board) {
-        boardService.writeBoard(board);
+    public String writeBoard(Board board, @RequestParam(required = false, value = "imageFile") MultipartFile imageFile) throws Exception {
+        boardService.writeBoard(board, imageFile);
         return "redirect:/board/list";
     }
 

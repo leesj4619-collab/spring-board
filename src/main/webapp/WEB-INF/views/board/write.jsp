@@ -12,6 +12,18 @@
     <div class="card p-4 shadow-sm">
         <h2 class="mb-4">새 게시물 작성</h2>
 
+        <form action="/board/write" method="post" enctype="multipart/form-data">
+
+            <input type="text"     name="title"   imageFile >
+            <input type="text"     name="writer"  imageFile >
+            <textarea name="content" ... ></textarea>
+
+            <!-- 이미지 첨부 -->
+            <input type="file" name="FileReader" accept="image/*" onchange="미리보기기능(this)">
+            <img id="미리보기" src="" style="display:none;">
+
+        </form>
+
         <form action="/board/write" method="post">
             <div class="mb-3">
                 <label class="form-label">제목</label>
