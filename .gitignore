@@ -1,5 +1,5 @@
 ### config.yml ###
-config.yml
+src/main/resources/config.yml
 
 HELP.md
 .gradle

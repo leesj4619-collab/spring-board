@@ -51,7 +51,9 @@ public class BoardService {
         // board_no 로 생성된 현재 게시물의 번호를 자바에서 실시간으로 가져와 활용한다.
         boardMapper.게시물추가(board);
         // 2. 만약에 이미지 파일이 없으면 게시물 추가만하고, 종료
-        if (imageFiles == null & imageFiles.isEmpty()) return;
+
+        // 파일의 데이터가 없거나 또는 비어있거나 둘중 하나라도 결함이 있으면 반환~
+        if (imageFiles == null || imageFiles.isEmpty()) return;
 
         // 3. 이미지가 존재한다면 저장 폴더 자동 생성
         File folder = new File(boardUploadPath);
@@ -124,6 +126,7 @@ public class BoardService {
 
     // 게시물 삭제 유무 나중에 확인
     public void deleteBoard(int board_no){
+        boardImageMapper.이미지전체삭제(board_no); // fk 제약으로
         boardMapper.게시물삭제(board_no);
     }
 }

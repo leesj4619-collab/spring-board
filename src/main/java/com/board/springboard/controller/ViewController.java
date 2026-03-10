@@ -2,6 +2,9 @@ package com.board.springboard.controller;
 
 
 import com.board.springboard.model.dto.Board;
+import com.board.springboard.model.dto.BoardImage;
+import com.board.springboard.model.mapper.BoardImageMapper;
+import com.board.springboard.model.mapper.BoardMapper;
 import com.board.springboard.model.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -28,7 +31,8 @@ import java.util.List;
      endpoint = "/board/edit"
      endpoint = "/board/delete"
     @PostMapping
-     endpoint = "/board/writer"
+     endpoint = "/board/write"
+
 
     ⭕         @Controller     ⭕ -> 마지막에 view 화면을 보여주는 것
 
@@ -39,6 +43,7 @@ import java.util.List;
 @RequiredArgsConstructor // 이한줄이 생성자 코드를 자동 생성해준다.
 public class ViewController {
     private final BoardService boardService;
+    private final BoardImageMapper boardImageMapper;
     /*
     아래 생성자 매개변수 코드를 @RequiredArgsConstructor 어노테이션으로
     대체하여 사용할 수 있다.
@@ -75,7 +80,7 @@ public class ViewController {
         return "board/list";
     }
 
-    // /board/writer
+    // /board/write
     @GetMapping("/board/write")
     public String writeView(){
         return "board/write";
@@ -139,8 +144,12 @@ public class ViewController {
         // 2. 모델에 데이터 담기 (JSP에서 사용할 이름: "board")
         model.addAttribute("board", boardData);
 
+        // service에서 컨트롤러로 가져와야한다.
+        List<BoardImage> images = boardImageMapper.이미지목록(board_no);
+        model.addAttribute("images", images);
         return "board/detail";
     }
+
 
     /**
      * 게시물 수정 이동 (기존 데이터 조회 포함)
@@ -158,6 +167,13 @@ public class ViewController {
 
         return "board/edit";
     }
+    @PostMapping("/board/edit")
+        public String editBoard(Board board) {
+
+        boardService.updateBoard(board);
+
+        return "redirect:/board/detail?no=" + board.getBoard_no();
+ }
 
     /**
      * 게시물 삭제 처리
@@ -176,6 +192,10 @@ public class ViewController {
 
         return "redirect:/board/list";
     }
+
+
+
+
 
 
 }

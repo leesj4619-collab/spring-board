@@ -2,8 +2,7 @@ spring:
   application:
     name: spring-board
   config:
-    import: optional:file:./config.yml
-
+    import: ./config.yml
   mvc:
     view:
       prefix: /WEB-INF/views/
@@ -13,15 +12,13 @@ spring:
     username: ${db.username}
     password: ${db.password}
     driver-class-name: com.mysql.cj.jdbc.Driver
-
-
-servlet:
-  encoding:
-    charset: utf-8
-    force: true
-  multipart:
-    max-file-size: 10MB
-    max-request-size: 10MB
+  servlet:
+    encoding:
+      charset: utf-8
+      force: true
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
 mybatis:
   mapper-locations: classpath:mappers/**/*.xml
@@ -30,5 +27,3 @@ file:
   upload:
     path: ${db.upload.profile-path}
     board-path: ${db.upload.board-path}
-    # path: C:/uploads/profile
-    # board-path: C:/uploads/board

@@ -23,8 +23,10 @@
         <div class="py-3" style="min-height: 200px; white-space: pre-wrap;">
             ${board.content}
         </div>
-        <c:if test="${not empty board.attach_img}">
-            <img src="${board.attach_img}"
+        <c:if test="${not empty images}">
+            <c:forEach var="이미지한장씩" items="${images}">
+                <img class="img-fluid" src="${이미지한장씩.img_path}">
+            </c:forEach>
         </c:if>
         <hr>
 
@@ -40,7 +42,7 @@
                     <!-- -->은   자바에서 가져오는 변수를 작성한 공간까지 모두 전체 주석${ }
                     < % -- -- % >은  자바에서 가져오는 변수는 주석처리가 안됨 jsp 확장자 안에서는 되도록이
             --%>
-
+            <!-- 삭제 버튼 -->
             <button type="button" class="btn btn-danger"
                     onclick="게시물삭제기능(${board.board_no})">삭제</button>
         </div>
