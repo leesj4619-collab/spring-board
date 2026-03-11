@@ -173,7 +173,7 @@ public class ViewController {
         boardService.updateBoard(board);
 
         return "redirect:/board/detail?no=" + board.getBoard_no();
- }
+    }
 
     /**
      * 게시물 삭제 처리
