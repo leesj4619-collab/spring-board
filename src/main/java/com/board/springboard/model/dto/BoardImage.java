@@ -10,7 +10,6 @@ import           lombok              .*              ;
 */
 // lombok에서 만들어진 기능을 가져와서 사용하는 어노테이션들 @= 어노테이션
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 
