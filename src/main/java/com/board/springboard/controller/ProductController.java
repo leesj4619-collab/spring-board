@@ -37,7 +37,6 @@ public class ProductController {
         return "product/addForm";
     }
 
-    // TODO 8. POST /product/add → 제품 추가 처리 후 redirect
     @PostMapping("/add")
     public String 제품추가처리(@ModelAttribute Product product,
                          RedirectAttributes redirectAttributes) {
@@ -52,8 +51,20 @@ public class ProductController {
         model.addAttribute("product", product); // 수정할 제품 데이터를 SQL에서 가져온 후 JSP 전달하기
         return "product/editForm";
     }
+    //TODO : 수정 Mapping을 Put으로 교체하고, 수정된 product 데이터를 수정페이지로 전달로 교체하기
+    @PutMapping("/edit") // PostMapping의 경우 제품을 수정한 다음 전달
+    @ResponseBody
+    public Product 제품수정처리(@ModelAttribute Product product, // TODO : 수정작업 필요
+                         RedirectAttributes redirectAttributes) {
+        // Post / Put / Patch 차이점을 인지하고 사용하자 제품 수정하는데 문제는 없다.
+        productService.제품수정(product);
+        redirectAttributes.addFlashAttribute("msg", "제품이 수정되었습니다.");
+        return product; // TODO : 수정작업 필요
+    }
 
+    /*
     @PostMapping("/edit") // PostMapping의 경우 제품을 수정한 다음 전달
+
     public String 제품수정처리(@ModelAttribute Product product,
                          RedirectAttributes redirectAttributes) {
         // Post / Put / Patch 차이점을 인지하고 사용하자 제품 수정하는데 문제는 없다.
@@ -61,8 +72,19 @@ public class ProductController {
         redirectAttributes.addFlashAttribute("msg", "제품이 수정되었습니다.");
         return "redirect:/product/product_list";
     }
+ */
 
-    // TODO 11. GET /product/delete?id=1 → 삭제 처리 후 redirect
+    @DeleteMapping("/delete") // ? 이후는 Mapping에서 작성하지 않는다.
+    @ResponseBody // html로 넘어가는 것이 아니라 html 기능에 대한 결과만 전달하겠다.
+    public String 제품삭제처리(@RequestParam Long id,
+                         RedirectAttributes redirectAttributes) {
+        productService.제품삭제(id);
+        redirectAttributes.addFlashAttribute("msg", "제품이 삭제되었습니다.");
+        // 제품 리스트로 돌아가서 제품이 삭제되었다는 메세지를 잠깐 보기위해 redirectAttributes로 가져온다.
+        return "ok";
+    }
+
+/*
     @GetMapping("/delete") // ? 이후는 Mapping에서 작성하지 않는다.
     public String 제품삭제처리(@RequestParam Long id,
                          RedirectAttributes redirectAttributes) {
@@ -71,6 +93,9 @@ public class ProductController {
         // 제품 리스트로 돌아가서 제품이 삭제되었다는 메세지를 잠깐 보기위해 redirectAttributes로 가져온다.
         return "redirect:/product/product_list";
    }
+
+ */
+
 }
 
 /*
