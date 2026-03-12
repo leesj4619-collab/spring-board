@@ -183,8 +183,22 @@
             })
             .catch(err => console.log("백엔드 전송을 실패했다면 왜 실패 했나요?! :",err));
 
-    }
+        // ai가 추천하는 긴 로직을 작성하지 않아도
+        // form 내부에 작성된 데이터들을 백엔드로 전송할 수 있다.
+        // append 쓸 때는 추가적인 세부 커스텀이 필요할 때
+        const formData = new FormData(document.querySelector("form")); //파일 전송을 도와주는 javaScript 객체
 
+        fetch("/board/write", {
+            method: "post",
+            body: formData,
+        })
+            .then((res) => res.json())
+            .then(결과 => {
+                location.href = "/board/list";
+            })
+            .catch(err => console.log(err));
+    }
+    // Controller는 ht 파일이 목적이고 RestController 결과가 목적
 </script>
 </body>
 </html>
