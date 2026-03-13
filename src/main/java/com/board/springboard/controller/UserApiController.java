@@ -24,7 +24,7 @@ public class UserApiController {
         // 힌트1: @RequestBody 로 JSON 을 받으면 Map<String, String> 으로 받을 수 있다.
         // 힌트2: requestData.get("name") 으로 이름 꺼내기
         // 힌트3: 찾은 유저가 null 이면 에러 메세지를, 아니면 이메일을 JSON 으로 반환
-        User 유저데이터 = userService.이메일로유저찾기(requestData.get("name"));
+        User 유저데이터 = userService.이메일로유저찾기(requestData.get("email"));
         if (유저데이터 != null) {
             return Map.of("email", 유저데이터.getEmail());  // 힌트: 유저 이메일 꺼내기
         } else {
