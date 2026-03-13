@@ -25,24 +25,18 @@
 
     <form action="/user/profile/edit" method="post">
 
+        <!-- Todo 14: form 의 action/method 제거하고 버튼을 type="button" + onclick 으로 변경 -->
         <table class="table mt-3">
             <tr>
                 <td>이름</td>
-                <td>
-                    <input type="text" name="name" value="${user.name}" class="form-control">
-                </td>
+                <td><input type="text" id="name" value="${user.name}" class="form-control"></td>
             </tr>
             <tr>
                 <td>이메일</td>
-                <td>
-                    <input type="text" name="email" value="${user.email}" class="form-control">
-                </td>
-            </tr>
-            <tr>
-                <td>가입일</td>
-                <td>${user.created_at}</td>
+                <td><input type="text" id="email" value="${user.email}" class="form-control"></td>
             </tr>
         </table>
+        <button type="button" class="btn btn-dark" onclick="정보수정기능()">저장하기</button>
 
         <button type="submit" class="btn btn-dark">저장하기</button>
     </form>
@@ -81,6 +75,30 @@
             }
             reader.readAsDataURL(input.files[0]);
         }
+    }
+        function 정보수정기능() {
+        const 이름 = document.getElementById(???).value;
+        const 이메일 = document.getElementById(???).value;
+
+        fetch("/user/profile/edit", {
+        method: ???,  // 힌트: POST
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+        name: ???,   // 힌트: 이름 변수
+        email: ???   // 힌트: 이메일 변수
+    })
+    })
+        .then(res => res.json())
+        .then(결과 => {
+        if (결과.msg) {
+        // Todo 15: 성공 메세지 alert 후 프로필 페이지로 이동
+        alert(???);
+        location.href = ???;  // 힌트: 프로필 페이지 주소
+    } else {
+        alert(결과.error);
+    }
+    })
+        .catch(err => console.log("요청 실패:", err));
     }
 </script>
 
