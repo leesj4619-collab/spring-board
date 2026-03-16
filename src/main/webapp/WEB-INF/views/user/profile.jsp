@@ -18,14 +18,13 @@
     </c:choose>
 
     <!-- 프로필 사진 수정하기 위한 업로드 폼 -->
-    <form action="/user/profile/upload" method="post" enctype="multipart/form-data">
-        <input type="file" name="imageFile" accept="image/*" onchange="미리보기기능(this)">
-        <button class="btn btn-dark mt-2">저장하기</button>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="imageFile"  accept="image/*" onchange="미리보기기능(this)">
+        <button type="button" onclick="프로필사진업로드()" class="btn btn-dark mt-2">저장하기</button>
     </form>
 
-    <form action="/user/profile/edit" method="post">
+    <form id="editForm">
 
-        <!-- Todo 14: form 의 action/method 제거하고 버튼을 type="button" + onclick 으로 변경 -->
         <table class="table mt-3">
             <tr>
                 <td>이름</td>
@@ -36,10 +35,10 @@
                 <td><input type="text" id="email" value="${user.email}" class="form-control"></td>
             </tr>
         </table>
-        <button type="button" class="btn btn-dark" onclick="정보수정기능()">저장하기</button>
-
-        <button type="submit" class="btn btn-dark">저장하기</button>
+        <button type="button" class="btn btn-dark" onclick="프로필정보수정()">저장하기</button>
     </form>
+    <div id="메시지창" class="mt-3"></div>
+
 
     <table class="table mt-3">
         <tr>
@@ -60,45 +59,86 @@
 </div>
 
 <script>
-    function 미리보기기능(input) {
+    function 파일을Base64로읽기(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload  = (e) => ____;
+            reader.onerror = () => ____;
+            reader.readAsDataURL(____);
+        });
+    }
+
+    async function 미리보기기능(input) {
         const preview = document.getElementById("미리보기");
         const noImg = document.getElementById("noImg");
 
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function (event) {
-                preview.src = event.target.result;
-                preview.style.display = "block";
-                if(noImg) {
-                    noImg.style.display = "none";
-                }
-            }
-            reader.readAsDataURL(input.files[0]);
+        if (!____ || !____[0]) return;
+
+        try {
+            const dataUrl = await 파일을Base64로읽기(____);
+            preview.src = ____;
+            preview.style.display = "____";
+            if (noImg) noImg.style.display = "____";
+
+        } catch (err) {
+            console.error("미리보기 실패:", err);
+            alert("____");
         }
     }
-        function 정보수정기능() {
-        const 이름 = document.getElementById(???).value;
-        const 이메일 = document.getElementById(???).value;
+    async function 프로필사진업로드() {
+        const 메시지창 = document.getElementById("____");
 
-        fetch("/user/profile/edit", {
-        method: ???,  // 힌트: POST
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-        name: ???,   // 힌트: 이름 변수
-        email: ???   // 힌트: 이메일 변수
-    })
-    })
-        .then(res => res.json())
-        .then(결과 => {
-        if (결과.msg) {
-        // Todo 15: 성공 메세지 alert 후 프로필 페이지로 이동
-        alert(???);
-        location.href = ???;  // 힌트: 프로필 페이지 주소
-    } else {
-        alert(결과.error);
+        try {
+            const formData = new FormData(document.getElementById("____"));
+
+            const 응답 = await fetch("____", {
+                method: "____",
+                body: ____
+            });
+
+            if (!응답.ok) throw new Error(`서버 오류: ${응답.status}`);
+
+            const div = document.createElement("____");
+            div.className = "____";
+            div.innerText = "____";
+            메시지창.innerHTML = "";
+            메시지창.appendChild(____);
+
+        } catch (err) {
+            const div = document.createElement("____");
+            div.className = "____";
+            div.innerText = "____";
+            메시지창.innerHTML = "";
+            메시지창.appendChild(____);
+        }
     }
-    })
-        .catch(err => console.log("요청 실패:", err));
+
+    async function 프로필정보수정() {
+        const 메시지창 = document.getElementById("____");
+        const data = Object.fromEntries(new FormData(document.getElementById("____")).entries());
+
+        try {
+            const 응답 = await fetch("____", {
+                method: "____",
+                headers: { "Content-Type": "____" },
+                body: JSON.stringify(____)
+            });
+
+            if (!응답.ok) throw new Error(`서버 오류: ${응답.status}`);
+
+            const div = document.createElement("____");
+            div.className = "____";
+            div.innerText = "____";
+            메시지창.innerHTML = "";
+            메시지창.appendChild(____);
+
+        } catch (err) {
+            const div = document.createElement("____");
+            div.className = "____";
+            div.innerText = "____";
+            메시지창.innerHTML = "";
+            메시지창.appendChild(____);
+        }
     }
 </script>
 

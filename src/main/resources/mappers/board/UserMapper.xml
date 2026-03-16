@@ -64,7 +64,6 @@
         WHERE id = #{id}
     </select>
 
-    <!-- TODO 1: id, parameterType, SET 절, WHERE 절을 채우세요 -->
     <update id="유저정보수정" parameterType="com.board.springboard.model.dto.User">
         UPDATE users
         SET name  = #{name},

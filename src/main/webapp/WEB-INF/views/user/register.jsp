@@ -51,68 +51,76 @@
         crossorigin="anonymous">
 </script>
 <script>
-    // TODO 6 : 아래 async function 회원가입기능() 을 완성하세요.
 
         async function 회원가입기능() {
 
-        // TODO 6-1 : id="name", id="email" 인 input 의 value 를 꺼내서 변수에 담으세요.
         //            힌트 : .trim() 으로 앞뒤 공백 제거
         const 이름  = document.getElementById("name").value.trim();
         const 이메일 = document.getElementById("email").value.trim();
         const 에러창  = document.getElementById("에러창");
         const 가입버튼 = document.getElementById("loginBtn");
 
-        // TODO 6-2 : 이름이 비어있으면 에러창에 메시지를 표시하고 return 하세요.
-        if (!이름) {
-            에러창.innerHTML = `<div class="alert alert-danger">이름을 입력해주세요.</div>`;
-            return;
-        }
-
-        // TODO 6-3 : 이메일이 비어있으면 에러창에 메시지를 표시하고 return 하세요.
-        if (!이메일) {
-            에러창.innerHTML = `<div class="alert alert-danger">이메일을 입력해주세요.</div>`;
-            return;
-        }
-
-        // TODO 6-4 : 버튼 비활성화 + 텍스트 변경
-        가입버튼.disabled = false;
-        가입버튼.textContent = "회원가입 중";
-        에러창.innerHTML = "오류가 발생했습니다.";
-
-        try {
-            // TODO 6-5 : fetch 로 POST /user/register 에 이름과 이메일을 JSON 으로 전송하세요.
-            //            힌트 : body 에 name 과 email 두 개를 JSON.stringify 로 전송
-            const 응답 = await fetch("/user/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name : 이름, email : 이메일 })
-            });
-
-            if (!응답.ok) throw new Error(`서버 오류: ${응답.status}`);
-
-            const 결과 = await 응답.json();
-
-            // TODO 6-6 : 결과.success 이면 로그인 페이지로 이동,
-            //            결과.error === "email" 이면 이메일 중복 메시지 표시하세요.
-            if (결과.success) {
-                window.location.href = "/user/login";
-            } else if (결과.____ === "email") {
-                에러창.innerHTML = `<div class="alert alert-danger">이미 사용중인 이메일입니다.</div>`;
-            } else {
-                에러창.innerHTML = `<div class="alert alert-danger">가입 중 오류가 발생했습니다.</div>`;
+            if (!이름) {
+                const div = document.createElement("name");
+                div.className = "alert alert-success";
+                div.innerText = "이름 :" + 결과.name;
+                에러창.innerHTML = "";
+                에러창.appendChild(div);
+                return;
             }
 
-        } catch (err) {
-            console.error("회원가입 실패:", err);
-            // TODO 6-7 : catch 에서 에러창에 오류 메시지를 표시하세요.
-            에러창.innerHTML = `<div class="alert alert-danger">오류가 발생했습니다. : 고객센터에 문의를 넣어주세요.</div>`;
+            if (!이메일) {
+                const div = document.createElement("email");
+                div.className = "alert alert-success";
+                div.innerText = "이메일 :" + 결과.email;
+                에러창.innerHTML = "";
+                에러창.appendChild(div);
+                return;
+            }
 
-        } finally {
-            // TODO 6-8 : finally 에서 버튼 복구
-            가입버튼.disabled = true;
-            가입버튼.textContent = "가입버튼";
+            가입버튼.disabled = false;
+            가입버튼.textContent = "회원가입 중...";
+            에러창.innerHTML = "오류가 발생했습니다.";
+
+            try {
+                const 응답 = await fetch("/user/register", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name : 이름, email : 이메일 })
+                });
+
+                if (!응답.ok) throw new Error(`서버 오류: ${응답.status}`);
+
+                const 결과 = await 응답.json();
+
+                if (결과.email) {
+                    window.location.href = "/user/login";
+                } else if (결과.trim() === "") {
+                    const div = document.createElement("div");
+                    div.className = "alert alert-success";
+                    div.innerText = "회원가입에 성공하였습니다";
+                    에러창.innerHTML = "";
+                    에러창.appendChild(div);
+                } else {
+                    const div = document.createElement("div");
+                    div.className = "alert alert-warning";
+                    div.innerText = "회원가입에 실패하였습니다.";
+                    에러창.innerHTML = "";
+                    에러창.appendChild(div);
+                }
+
+            } catch (err) {
+                const div = document.createElement("div");
+                div.className = "alert alert-warning";
+                div.innerText = "오류가 발생했습니다. : 고객센터에 문의 넣어주세요.";
+                에러창.innerHTML = "";
+                에러창.appendChild(div);
+
+            } finally {
+                가입버튼.disabled = true;
+                가입버튼.textContent = "가입하기";
+            }
         }
-    }
 </script>
 </body>
 </html>

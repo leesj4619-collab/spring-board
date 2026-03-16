@@ -20,9 +20,7 @@
         <div class="d-grid">
             <button type="button" class="btn btn-dark" id="searchBtn" onclick="유저찾기기능()">검색</button>
         </div>
-        <div id="결과창" class="mt-3">
-            <div class="alert alert-success">이메일 : 결과.email </div>
-        </div>
+        <div id="결과창" class="mt-3"></div>
     </div>
 </div>
 
