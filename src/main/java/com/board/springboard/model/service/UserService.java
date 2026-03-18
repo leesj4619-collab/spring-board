@@ -1,19 +1,28 @@
 package com.board.springboard.model.service;
 
+import com.board.springboard.common.EmailCodeService;
+import com.board.springboard.common.JwtUtil;
 import com.board.springboard.model.dto.User;
 import com.board.springboard.model.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder; // 비밀번호 BCrypt 검증
+    private final JwtUtil jwtUtil;                  // 토큰 발급
+    private final EmailCodeService emailCodeService; // 인증번호 발송
+    private final Map<String, String> 리프레시토큰보관함 = new ConcurrentHashMap<>(); // 리프레시 토큰 메모리 저장 30분 or 14일 정도 토큰
 
     /**
      * 이메일 중복 여부를 확인하는 메서드
@@ -58,6 +67,7 @@ public class UserService {
         }
         // 이메일 중복체크기능이 false이고 이메일이 sql에 존재하지 않는게 사실이라면
         // 회원가입을 진행하고
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userMapper.회원가입(user);
         return true; // sql에 저장이 완료되었다면 회원가입 완료를 클라이언트에게 전달하겠다.
     }
@@ -67,8 +77,21 @@ public class UserService {
          * @param email 로그인 시 입력한 이메일
          * @return 조회된 User 객체 / 존재하지 않으면 null
          */
-    public User 로그인(String email) {
-            return userMapper.로그인(email);
+    public Map<String, String> 로그인(String email, String 입력비밀번호) {
+            //return userMapper.로그인(email);
+            User user = userMapper.로그인(email); //db에서 해당 유조의 이메일이 존재하는지 확인한다.
+            // 유저 정보가 없거나 유저가 입력한 비밀번호 암호화한 것과 db에 저장된 암호화비밀번호가 같지 않다면 null 반환
+            // 스프링에서 만든 비밀번호 맞는지 확인하는 보안 코드 로직에 의해 아래와 같이 기입해주면 확인처리 해줄 것
+            // .matches(웹사이트에서 유저가 입력한 비밀번호를 암호화 처리, DB에 저장된 암호화 비밀번호)
+            //                                          클라이언트     DB에 저장된 비밀번호
+            if(user == null || !passwordEncoder.matches(입력비밀번호, user.getPassword())) return null;
+            // 위 만약에서 걸리지 않으면 본인인증이 확인된 유저의 토큰 생성
+            String 액세스토큰 = jwtUtil.액세스토큰만들기(email); // 30분 유효
+            String 리프레시토큰 = jwtUtil.리프레시토큰만들기(email); // 14일 유효 토큰 둘 중 하나 사용해도 되며,
+            // 개발자는 액세스토큰으로 웹사이트를 운영할 것인지 리프레시토큰으로 운영할 것인지 판단 후 둘 중 하나 사용할 것
+            // 크롬 = 리프레시 토큰 네이버 다음 = 액세스 토큰 형태 유효기간은 개발자와 회사에서 지정한 규정대로 설정한다.
+            리프레시토큰보관함.put(email, 리프레시토큰);
+            return Map.of("accessToken", 액세스토큰, "refreshToken",리프레시토큰);
     }
 
     /**
@@ -137,7 +160,6 @@ public class UserService {
         return userMapper.유저단건조회(id);
     }
 
-    // TODO 3: 빈칸을 채우세요
     public void 유저정보수정(User user) {
         userMapper.유저정보수정(user);
     }
