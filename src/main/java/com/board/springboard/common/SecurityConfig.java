@@ -59,8 +59,7 @@ public class SecurityConfig {
         // 위에서 작성한 설정 내용을 최종족으로 완성한 모습을 반환하겠다.
         return http.build();
     }
-
-    // 클라이언트가 작성한 비밀번호를 스프링에서 만든 비밀번호 암호화 파일을 이용해서 읽을 수 없는 암화화
+    // 클라이언트가 작성한 비밀번호를 스프링에서 만든 비밀번호 암호화 파일을 이용해서 읽을 수 없는 암화화처리 변환
     @Bean
     public PasswordEncoder 비밀번호인코더(){
         return new BCryptPasswordEncoder();
