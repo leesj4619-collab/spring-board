@@ -36,6 +36,12 @@ public interface UserMapper {
     // String,int,Long,boolean 등 다양한 자료형 작성가능하며 개발자가 만들어놓은
     // 외부 class에서 기능을 사용만 하고, 기능에 대한 결과를 반환할 필요가 없을 경우
     // void(=return할 데이터 존재하지 않음)로 표기 가능
+
+    /**
+     *
+     * @param email -> 비밀번호는 Service에서 BCrypt 검증
+     * @return
+     */
     User 로그인(String email);
 
     User 이메일로유저찾기(String email);

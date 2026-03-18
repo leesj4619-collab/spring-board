@@ -26,5 +26,14 @@ public class User {
     private String name;
     private String email;
     private LocalDateTime created_at;
-    private String profile_img; // 새로운 경로
+    private String profile_img; // 프로필 사진 파일 경로 -> profileImg
+
+    // 실무에서는 SQL 무조건 _로 구분짓는다.
+    // html css js -> className _로 구분짓거나 -으로 구분짓는 방법 많이 사용
+    // 자바에서는 카멜케이스 형태로 구분짓는 경우가 많다.
+    // 다른 명칭들은 본인들의 단어가 어떤 의미인지 표기만 하면된다.
+    // 자바의 경우 Mapper Service Controller처럼 부가적인 수식어가 붙는 경우가 많기 떄문에
+    // 카멜케이스 형태로 작성
+    // 변수 명명 규칙 / 파일 명명 규칙의 경우 누구나 알 수 있는 명칭으로 작성
+    // 길게 작성 OK
 }
