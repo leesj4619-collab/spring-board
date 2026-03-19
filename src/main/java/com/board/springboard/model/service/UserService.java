@@ -164,5 +164,23 @@ public class UserService {
         userMapper.유저정보수정(user);
     }
 
+    public void 인증번호발송(String email) {
+        emailCodeService.인증번호발송(email);
+    }
 
+    public boolean 인증번호검증(String email, String code){
+        return emailCodeService.인증번호확인(email, code);
+    }
+
+    public String 토큰재발급(String 리프레시토큰) {
+        if(!jwtUtil.유효토큰인지확인하는기능(리프레시토큰))return null;
+        String email = jwtUtil.이메일가져오기(리프레시토큰);
+        String stored = 리프레시토큰보관함.get(email);
+        if (!리프레시토큰.equals(stored)) return null;
+        return jwtUtil.액세스토큰만들기(email);
+    }
+
+    public void 로그아웃(String email){
+        리프레시토큰보관함.remove(email);
+    }
 }
