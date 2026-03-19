@@ -34,6 +34,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil; // 토큰 검증은 util 맡긴다.
+    private final CookieUtil cookieUtil;
 
     /**
      * protected    void     doFilterInternal
@@ -51,12 +52,11 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest 요청,
                                     HttpServletResponse 응답,
                                     FilterChain 다음필터) throws ServletException, IOException {
-        String token = 쿠키에서토큰꺼내기(요청); // 쿠키에서 access_token 꺼내기 없으면 null 반환!
-
+  //      String token = 쿠키에서토큰꺼내기(요청); // 쿠키에서 access_token 꺼내기 없으면 null 반환!
+        String token = cookieUtil.가져오기(요청, "access_token");
         // 토큰이 있고 유효하면 -> 스프링 보안팀(=시큐리티)에 로그인 상태 등록
         // 토큰이 존재하고 만료/변조된 토큰이 아니면
         if (token != null && jwtUtil.유효토큰인지확인하는기능(token)) {
-
             String email = jwtUtil.이메일가져오기(token); // 토큰 파싱(분해)해서 이메일 꺼내기
 
             // 인증정보라는 공간에는 "이 사람 로그인 되었다" 라는 신분증을 생성한 데이터가 담겨져 있다

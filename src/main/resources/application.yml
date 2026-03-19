@@ -19,44 +19,29 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
-  # 이메일 발송 (Gmail SMTP)
-  # SMTP = 이메일 보내기 imap = 메일 받기(=기기간의 동기화 기능) pop3 = 메일 받기 (=기기간의 동기화 안됨)
   mail:
-    host: smtp.gmail.com # 지메일을 이용해서 메일 발송하기
-    password: $[mail.password] # config.yml에서 비밀번호를 전달
-    username: $[mail.username]
-    # 자바로 메일보내기가 내부적으로 java.mail로 만든 기능 사용 그 설정값을 우리가 직접 넘겨줌
-    # spring 부트가 기본적으로 메일 보낼 때 세팅을 해놓은 것을 우리회사 입맛대로 교체
+    host: smtp.gmail.com
+    username: ${mail.username}
+    password: ${mail.password}
     properties:
       mail:
-        smtp:            #smtp -> SMTP 변경 하지만 소문자 정답 대문자로 작성하면 변수명 오류 인증 오류
-          auth: true     #SMTP 서버에 아이디/비밀번호 로그인 허용
-          starttls:      #starttls -> 오타: 단어 'starttls' 내 소문자 맞음
-            enable: true # 암호화 처리에서 지메일로 전달하겠다. *TLS
-
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    port: 587
+    #메일보낼 때 처음부터 암호화 처리를 해서 보내는게 아니라 정말로 메일이 가고 있을 때 암호화 처리를 진행
 mybatis:
   mapper-locations: classpath:mappers/**/*.xml
   configuration:
     map-underscore-to-camel-case: true
-    # false가 기본값 -> 과제 true로 교체한 다음 profileImg를
-    # 자바에서 profileImg로 교체하여 사용해보기
-    # sql _를 이용하여 단어 구분
-    # java에서는 camelCase 케이스를 이용해서 단어 구분을 할 수 있게 설정
-    # sql 대소문자 구분 없음 _를 이용해서 주로 단어 구분 스네이크케이스
-    # java 에선 카멜케이스를 많이 사용
 
 file:
   upload:
     path: ${db.upload.profile-path}
     board-path: ${db.upload.board-path}
 
-# config 작성한 변수이름
-# application 작성한 변수이름 동일
-# 현재상황에서는
-# jwt.secret을 두번 선언한 것과 같기 때문에
-# config에 작성하는 변수 이름과
-# application에 작성하는 변수이름 달라야한다.
 jwt:
   secret: ${jwt.config.secret}
-  access-expiry: 1800000     #30분 (ms)
-  refresh-expiry: 1209600000 #14일 (ms)
+  access-expiry: 1800000
+  refresh-expiry: 1209600000

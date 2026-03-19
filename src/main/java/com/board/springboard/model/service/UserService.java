@@ -150,7 +150,7 @@ public class UserService {
         //6. DB 업데이트 : 해당 유저의 profileImg 컬럼에 웹 경로 저장
         User db저장할유저정보 = new User();
         db저장할유저정보.setId(loginUser.getId());
-        db저장할유저정보.setprofileImg(웹경로);
+        db저장할유저정보.setProfileImg(웹경로);
         userMapper.프로필사진수정(db저장할유저정보);
 
         return userMapper.유저단건조회(loginUser.getId());

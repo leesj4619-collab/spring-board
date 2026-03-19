@@ -17,8 +17,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-
-
         /**
          * 유저 프로필 사진 매핑
          * 웹   URL : /uploads/profile/**

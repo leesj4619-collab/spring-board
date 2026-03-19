@@ -11,10 +11,7 @@ import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
@@ -110,6 +107,14 @@ public class UserApiController {
         userService.프로필사진업로드(로그인유저, imageFile, uploadPath);
         return ResponseEntity.ok(Map.of("message","프로필 사진 저장 완료"));
     }
+
+    @GetMapping("/user/profile-info")
+    public ResponseEntity<?> 프로필정보(@AuthenticationPrincipal String email) {
+        if(email == null) return ResponseEntity.status(401).build();
+        User user = userService.이메일로유저찾기(email);
+        return ResponseEntity.ok(Map.of("name",user.getName()));
+    }
+
 
     /*
     @PostMapping("/user/profile/edit")

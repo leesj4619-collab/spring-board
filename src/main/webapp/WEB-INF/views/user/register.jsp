@@ -85,10 +85,72 @@
 </div>
 </div>
 <script>
+    async function 인증번호확인() {
+        const email = document.getElementById("email").value.trim();   // TODO 1 : id 값 작성
+        const code  = document.getElementById("code").value.trim();   // TODO 2 : id 값 작성
+        const 결과  = document.getElementById("인증결과");
+
+        const res = await fetch("/user/verify-code", {                             // TODO 3 : 요청 주소 작성
+            method: "POST",                                           // TODO 4 : 전송 방식 작성
+            headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, code })                     // TODO 5 : 전송할 데이터 작성 (힌트: 이메일과 코드)
+    });
+
+        if (res.ok) {
+            이메일인증완료 = true;                                   // TODO 6 : 인증 완료 값 작성
+            결과.innerHTML = '<span class="text-success fw-bold">인증 완료</span>';
+            document.getElementById("code").disabled = false;        // TODO 7 : 재입력 방지 값 작성
+        } else {
+            결과.innerHTML = '<span class="text-danger">인증번호가 올바르지 않습니다.</span>';
+        }
+    }
+
+    async function 가입하기() {
+        if (이메일인증완료) {                                                 // TODO 8 : 인증 미완료 조건 작성
+            alert("이메일 인증을 먼저 완료해주세요.");
+            return;
+        }
+
+        const name     = document.getElementById("name").value.trim();  // TODO 9  : id 값 작성
+        const email    = document.getElementById("email").value.trim();  // TODO 10 : id 값 작성
+        const password = document.getElementById("password").value.trim();  // TODO 11 : id 값 작성
+
+        if (!name || !email || !password) {
+            alert("모든 항목을 입력하세요.");
+            return;
+        }
+
+        const res = await fetch("/user/register", {                     // TODO 12 : 요청 주소 작성
+            method: "POST",                                             // TODO 13 : 전송 방식 작성
+            headers: { "Content-Type": "application-json" },                                   // TODO 14 : 헤더 작성
+        body: JSON.stringify({ name, email, password })                  // TODO 15 : 전송할 데이터 작성 (힌트: 이름, 이메일, 비밀번호)
+    });
+
+        const data = await res.json();
+        if (res.ok) {
+            window.location.href = "/user/login?join=ture";              // TODO 16 : 성공 시 이동할 주소 작성
+            // 힌트 : 로그인 페이지 + 성공 파라미터
+        } else {
+            showAlert("danger", data.message);                            // TODO 17 : 실패 타입 작성
+        }
+    }
+
+    function showAlert(type, msg) {
+        const el = document.getElementById("알림창");                     // TODO 18 : id 값 작성
+        el.className = "alert alert-" + type;
+        el.textContent = msg;
+    }
     // const = 내부 데이터 변동 불가 let = 내부 데이터 변동 가능 변수
     let 이메일인증완료 = false; // true
     // const 이메일인증완료로 작성하면 이메일인증완료 공간은 데이터 변경 불가능한 공간으로 처리되어 true 변경할 수 없다.
     // var -> 심하게 레거시한 코드 추천 xxx
+
+    function showAlert(type, message) {
+        const 알림창 = document.getElementById("알림창");
+        알림창.className = `alert alert-${type}`;
+        알림창.innerText = message;
+        알림창.classList.remove("d-none");
+    }
 
     async function 인증번호발송(){
         const email = document.getElementById("email").value.trim();
