@@ -14,120 +14,81 @@
 
         <h2 class="mb-4 text-center fw-bold">로그인</h2>
 
-        <c:if test="${param.success == 'join'}">
-            <div class="alert alert-success">🎉 회원가입이 완료되었습니다. 로그인해주세요.</div>
-        </c:if>
+        <div id="알림창" class="d-none mb-3"></div>
 
-        <!-- get Post 둘도 가능 -->
+        <div class="mb-3">
+            <label class="form-label">이메일</label>
+            <input type="email"
+                   id="email"
+                   name="email"
+                   class="form-control"
+                   placeholder="이메일을 입력하세요">
+        </div>
 
-            <div class="mb-3">
-                <label class="form-label">이메일</label>
-                <input type="email" id="email" name="email" class="form-control" placeholder="이메일을 입력하세요" required>
-            </div>
-
-            <div id="에러창"></div>
-
-<%--            <div class="d-grid mt-4">--%>
-<%--                <button type="button" id="loginBtn" onclick="로그인기능()" class="btn btn-dark">로그인</button>--%>
-<%--            </div>--%>
-            <input type="email" id="email">
-            <input type="password" id="password">
-            <button onclick="로그인()">로그인</button>
-
-            <div class="text-center mt-3">
-                <a href="/user/register" class="text-muted">계정이 없으신가요? 회원가입</a>
-            </div>
-            <div class="text-center mt-2">
-                <!--
-                href에는 .jsp 파일 이름 쓰는 것이 아니라
-                @GetMapping()이나 @__Mapping()에 연결된 "" 내부에 작성되어 있는
-                주소 데이터를 작성하는 것이다.
-                -->
-                <a href="/user/find-email" class="text-muted">이메일 찾기!</a>
-            </div>
-
+        <div class="mb-3">
+            <label class="form-label">비밀번호</label>
+            <input type="password"
+                   id="password"
+                   name="password"
+                   class="form-control"
+                   placeholder="비밀번호를 입력하세요">
+        </div>
+        <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-dark" onclick="로그인()">로그인</button>
+        </div>
+        <div class="text-center mt-3">
+            <a href="/user/register" class="text-muted">계정이 없으신가요? 회원가입</a>
+        </div>
+        <div class="text-center mt-2">
+            <a href="/user/find-email" class="text-muted"> 이메일 찾기!</a>
+        </div>
     </div>
 </div>
 
+
+<script>
+    // == type 이 같은지는 확인하지 않고, 내부 데이터가 같은가?   === type 까지 확인해서 데이터 같은가?
+    const params = new URLSearchParams(window.location.search);
+    if(params.get('success') === "join") {
+        const el = document.getElementById("알림창");
+        el.className = "alert alert-success";
+        el.textContent = "회원가입이 완료되었습니다. 로그인해주세요.";
+        // 나중에는 회원가입 완료되었다는 알림 표기를 자바스크립트를 이용해서 몇초간 보여주고 사라지게 할 것
+    }
+
+    async function 로그인() {
+        // document.getElementById("email") = html에서 id로 email로 작성한 것에 대한 태그에 들어 있는 모든 정보를 가져온 다음에
+        // .value.trim(); = 그 중에서 value로 들어있는 클라이언트가 작성한 이메일 데이터를 양쪽 공백 제거하고 const email 공간에 담아두겠다.
+        // .value = 클라이언트가 작성한 데이터가 저장되어 있는 키이름
+        // .trim() = 양쪽공백 제거하기 기능
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+        if (!email || !password) {
+            alert("이메일과 비밀번호를 입력하세요.");
+            return; // 로그인을 할 권한이 없기 때문에 돌려보내기 아래 코드 실행 못하게 하기
+            // return을 안쓰면 이메일과 비밀번호를 입력하세요.을 보여주고 로그인 시켜줌
+        }
+
+        const res = await fetch("/user/login", {
+            method : "POST",
+            headers : {"Content-Type": "application/json"},
+            body: JSON.stringify({email, password}), // json 되어있는 자바스크립트를 문자열로 변환해서 전선으로 한 줄 전달
+        });
+
+        const data = await res.json(); // 만약 백엔드에서 응답이 오면 문자열로 온 응답을 다시 json 형태로 변환해서 data 공간 임심 보관
+        if (res.ok) window.location.href="/";
+        else {
+            const el = document.getElementById("알림창");
+            el.className = "alert alert-danger";
+            el.textContent = data.message; // 백엔드에서 온 응답을 그대로 보여주겠다.
+        }
+
+    }
+
+</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous">
-</script>
-<script>
-    async function 로그인() {
-        const email    = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value.trim();
-
-        const res = await fetch("/user/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email : password})  // ← JSON 으로 변환해서 전송
-        });
-
-        const data = await res.json();
-
-        if (res.ok) {
-            window.location.href = "/"
-            // TODO : 성공 시 이동 코드 작성
-        } else {
-            "에러가 발생했습니다. 다시 실행해주세요!"
-            // TODO : 실패 시 에러 메시지 표시 코드 작성
-        }
-    }
-    <%--async function 로그인기능() {--%>
-    <%--    const 이메일 = document.getElementById("email").value;--%>
-    <%--    const 에러창 = document.getElementById("에러창");--%>
-    <%--    const 로그인버튼 = document.getElementById("loginBtn");--%>
-    <%--    // TODO 5-3 : 이메일이 비어있으면 에러창에 메시지를 표시하고 return 하세요.--%>
-    <%--    if (이메일.trim() === "") {--%>
-    <%--        에러창.innerHTML = `<div class="alert alert-danger mt-2">이메일을 입력해주세요.</div>`;--%>
-    <%--        return;--%>
-    <%--    }--%>
-    <%--    // TODO 5-4 : 버튼을 비활성화하고 텍스트를 "로그인 중..." 으로 바꾸세요.--%>
-    <%--    //            힌트 : 버튼변수.disabled = ____;--%>
-    <%--    //            힌트 : 버튼변수.textContent = "____;--%>
-    <%--    로그인버튼.disabled = false;--%>
-    <%--    로그인버튼.textContent = "로그인 중...";--%>
-
-    <%--    try {--%>
-    <%--        // TODO 5-5 : fetch 로 POST /user/login 에 이메일을 JSON 으로 전송하세요.--%>
-    <%--        //            힌트 : method, headers, body 를 채우세요.--%>
-    <%--        //            힌트 : body 에는 JSON.stringify({ email: 이메일 }) 을 사용하세요.--%>
-    <%--        const 응답 = await fetch("/user/login", {--%>
-    <%--            method: "POST",--%>
-    <%--            headers: { "Content-Type": "application/json" },--%>
-    <%--            body: JSON.stringify({ email : 이메일 })--%>
-    <%--        });--%>
-
-    <%--        // TODO 5-6 : 응답이 실패(4xx, 5xx)일 경우 에러를 throw 하세요.--%>
-    <%--        //            힌트 : if (!응답.ok) throw new Error(`서버 오류: ${응답.status}`);--%>
-    <%--        if (!응답.ok) throw new Error(`서버 오류: ${응답.status}`);--%>
-
-    <%--        // TODO 5-7 : 응답을 JSON 으로 변환하세요.--%>
-    <%--        //            힌트 : await 응답변수.json()--%>
-    <%--        const 결과 = await 응답변수.json();--%>
-
-    <%--        // TODO 5-8 : 결과.success 가 true 이면 메인페이지로 이동,--%>
-    <%--        //            false 이면 에러창에 에러 메시지를 표시하세요.--%>
-    <%--        //            힌트 : window.location.href = 결과.redirectUrl || "/";--%>
-    <%--        if (결과.success) {--%>
-    <%--            window.location.href = 결과.redirectUrl || "/";;--%>
-    <%--        } else {--%>
-    <%--            에러창.innerHTML = `<div class="alert alert-danger mt-2">이메일 또는 정보가 올바르지 않습니다.</div>`;--%>
-    <%--        }--%>
-
-    <%--    } catch (err) {--%>
-    <%--        // TODO 5-9 : catch 에서 에러창에 오류 메시지를 표시하세요.--%>
-    <%--        console.error("로그인 실패:", err);--%>
-    <%--        에러창.innerHTML = `<div class="alert alert-danger mt-2">오류가 발생했습니다. : 고객센터에 문의하세요.</div>`;--%>
-
-    <%--    } finally {--%>
-    <%--        // TODO 5-10 : finally 에서 버튼을 다시 활성화하고 텍스트를 "로그인" 으로 복구하세요.--%>
-    <%--        로그인버튼.disabled = true;--%>
-    <%--        로그인버튼.textContent = "로그인";--%>
-    <%--    }--%>
-
-    <%--}--%>
 </script>
     </body>
 </html>
