@@ -38,7 +38,7 @@ public class UserApiController {
         userService.인증번호발송(body.get("email"));
         return ResponseEntity.ok(Map.of("message","인증번호가 발송되었습니다."));
     }
-    @PostMapping("/user/check-email")
+    @PostMapping("/user/verify-code")
     public ResponseEntity<?> 인증번호확인(@RequestBody  Map<String, String> body) {
         boolean 성공 = userService.인증번호검증(body.get("email"), body.get("code"));
         if (!성공) return ResponseEntity.badRequest().body(Map.of("message","인증번호가 올바르지 않습니다"));
@@ -79,7 +79,7 @@ public class UserApiController {
         User 로그인유저 = userService.이메일로유저찾기(email);
         user.setId(로그인유저.getId());
         userService.유저정보수정(user);
-        return ResponseEntity.ok(Map.of("message", "정보가 수정되었습니다."))
+        return ResponseEntity.ok(Map.of("message", "정보가 수정되었습니다."));
     }
 
     @PostMapping("/user/logout")

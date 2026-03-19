@@ -8,8 +8,8 @@
     <h2>내 프로필</h2>
     <!-- 프로필 사진 미리보기 -->
     <c:choose>
-        <c:when test="${not empty user.profile_img}">
-            <img src="${user.profile_img}" alt="프로필 사진" width="120">
+        <c:when test="${not empty user.profileImg}">
+            <img src="${user.profileImg}" alt="프로필 사진" width="120">
         </c:when>
         <c:otherwise>
             <img id="미리보기" src="" style="display: none; width: 120px;">

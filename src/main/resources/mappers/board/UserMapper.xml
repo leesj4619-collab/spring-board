@@ -52,12 +52,12 @@
     </select>
 
     <!--
-    #{profile_img} -> #{profileImg} 교체해서 사용해보기
+    #{profileImg} -> #{profileImg} 교체해서 사용해보기
     자바에서 선언한 필드이름과 SQL에 작성한 컬럼명칭을
     카멜케이스와 스네이크케이스로 맞추어 사용할 수 있다.
     -->
     <update id="프로필사진수정" parameterType="com.board.springboard.model.dto.User">
-        UPDATE users SET profile_img = #{profile_img} WHERE id = #{id}
+        UPDATE users SET profileImg = #{profileImg} WHERE id = #{id}
         <!-- WHERE을 작성하지 않으면 users 테이블에 존재하는 모든 프로필이미지 수정 -->
     </update>
     <!-- select id="유저단건조회"

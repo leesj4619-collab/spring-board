@@ -37,8 +37,8 @@ spring:
 mybatis:
   mapper-locations: classpath:mappers/**/*.xml
   configuration:
-    map-underscore-to-camel-case: false
-    # false가 기본값 -> 과제 true로 교체한 다음 profile_img를
+    map-underscore-to-camel-case: true
+    # false가 기본값 -> 과제 true로 교체한 다음 profileImg를
     # 자바에서 profileImg로 교체하여 사용해보기
     # sql _를 이용하여 단어 구분
     # java에서는 camelCase 케이스를 이용해서 단어 구분을 할 수 있게 설정

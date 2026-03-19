@@ -27,7 +27,7 @@ public class User {
     private String email;
     private String password; // 비밀번호 컬럼 추가
     private LocalDateTime created_at;
-    private String profile_img; // 프로필 사진 파일 경로 -> profileImg
+    private String profileImg; // 프로필 사진 파일 경로 -> profileImg
 
     // 실무에서는 SQL 무조건 _로 구분짓는다.
     // html css js -> className _로 구분짓거나 -으로 구분짓는 방법 많이 사용

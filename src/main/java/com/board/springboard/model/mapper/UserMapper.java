@@ -48,8 +48,8 @@ public interface UserMapper {
 
     /**
      * 프로필 사진 경로 업데이트
-     * 파일 업로드 후 저장된 경로(String)를 DB의 profile_img 컬럼에 저장
-     * @param user id + profile_img 값이 담긴 User 객체를 SQL로 전달
+     * 파일 업로드 후 저장된 경로(String)를 DB의 profileImg 컬럼에 저장
+     * @param user id + profileImg 값이 담긴 User 객체를 SQL로 전달
      */
     void 프로필사진수정(User user);
 

@@ -112,7 +112,7 @@ public class UserService {
      * 2. 저장 폴더가 없으면 자동으로 생성(서버 재시작 재부팅 시 안전하게 이미지를 가져올 수 있다.) <br/>
      * 3. 파일명 충돌 방지를 위해 UUID + 원본 확장자로 파일명 생성 <br/>
      * 4. 서버 디스크에 파일 저장 <br/>
-     * 5. DB의 profile_img 컬럼에 웹 접근 경로 저장 <br/>
+     * 5. DB의 profileImg 컬럼에 웹 접근 경로 저장 <br/>
      * 6. 세션 갱신을 위해 수정된 최신 User 데이터 객체 반환 <br/>
      *
      * @param loginUser 현재 로그인 되오있는 세션에서 꺼낸 현재 로그인 유저의 정보가 담겨있는 변수공간의 명칭
@@ -147,10 +147,10 @@ public class UserService {
         //5. DB에 저장할 웹 접근 경로 설정
         String 웹경로 = "/uploads/profile/" + 저장할파일;
 
-        //6. DB 업데이트 : 해당 유저의 profile_img 컬럼에 웹 경로 저장
+        //6. DB 업데이트 : 해당 유저의 profileImg 컬럼에 웹 경로 저장
         User db저장할유저정보 = new User();
         db저장할유저정보.setId(loginUser.getId());
-        db저장할유저정보.setProfile_img(웹경로);
+        db저장할유저정보.setprofileImg(웹경로);
         userMapper.프로필사진수정(db저장할유저정보);
 
         return userMapper.유저단건조회(loginUser.getId());
